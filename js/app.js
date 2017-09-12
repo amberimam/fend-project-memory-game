@@ -74,7 +74,7 @@ function handleRestart () {
   $('.moves').text('0');
   $('.card').removeClass('open show match');
   clearInterval(timer);
-  $(".timer").html('00:00');
+  $('.timer').html('00:00');
   setupGame();
 }
 
@@ -92,6 +92,12 @@ function handleRestart () {
  * @param event
  */
 function handleCardClick (event) {
+
+  /* Ignore clicks on cards that are already open */
+  if ($(this).hasClass('open')) {
+    return;
+  }
+
   openCards.push({id: $(this).attr('card-id'),
                   symbol: $(this).attr('symbol')});
 
@@ -99,11 +105,7 @@ function handleCardClick (event) {
   $(this).addClass('open show');
 
   if (openCards.length === 2) {
-    if ((openCards[0].id == openCards[1].id) &&
-        (openCards[0].symbol == openCards[1].symbol)) {
-      /* the same exact card was clicked on multiple times so ignore this click */
-      openCards.splice(1, 1);
-    } else if (cardsMatch()) {
+    if (cardsMatch()) {
       lockOpenCards();
 
       openCards = [];
